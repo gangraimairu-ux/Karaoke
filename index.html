@@ -1,1 +1,1108 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
+<title>Karaoke Online</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    background: #09090c;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Arial, sans-serif;
+}
+
+button, input {
+    font: inherit;
+}
+
+button {
+    touch-action: manipulation;
+}
+
+/* HOME */
+
+#home {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.home-card {
+    width: 100%;
+    max-width: 440px;
+    padding: 30px 22px;
+    border-radius: 26px;
+    background: rgba(255,255,255,.045);
+    border: 1px solid rgba(255,255,255,.1);
+    box-shadow: 0 25px 80px rgba(0,0,0,.5);
+}
+
+.logo {
+    text-align: center;
+    font-size: 42px;
+    font-weight: 900;
+    letter-spacing: -2px;
+
+    background: linear-gradient(
+        90deg,
+        #ff4d9e,
+        #ff934d,
+        #ffe14d,
+        #4dffa6,
+        #4d8bff,
+        #b84dff
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.subtitle {
+    text-align: center;
+    color: #888;
+    margin-top: 8px;
+    margin-bottom: 28px;
+}
+
+.input {
+    width: 100%;
+    height: 52px;
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 14px;
+    background: #15151b;
+    color: white;
+    padding: 0 16px;
+    outline: none;
+    margin-bottom: 12px;
+    -webkit-appearance: none;
+}
+
+.input:focus {
+    border-color: #4d8bff;
+}
+
+.btn {
+    width: 100%;
+    min-height: 52px;
+    border: 0;
+    border-radius: 14px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.create-btn {
+    background: linear-gradient(90deg, #4d8bff, #b84dff);
+}
+
+.join-btn {
+    background: #17171e;
+    border: 1px solid rgba(255,255,255,.1);
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #555;
+    font-size: 12px;
+    margin: 12px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: rgba(255,255,255,.08);
+}
+
+.error {
+    display: none;
+    background: rgba(255,50,80,.1);
+    border: 1px solid rgba(255,50,80,.2);
+    color: #ff718b;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+/* ROOM */
+
+#room {
+    display: none;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: rgba(9,9,12,.94);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.room-title {
+    font-weight: 800;
+    font-size: 15px;
+}
+
+.room-code {
+    color: #777;
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+.leave-btn {
+    border: 0;
+    border-radius: 11px;
+    padding: 10px 13px;
+    background: #24141b;
+    color: #ff719b;
+    font-weight: 700;
+}
+
+.content {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 16px;
+}
+
+/* STAGE */
+
+.stage {
+    min-height: 600px;
+    padding: 18px;
+    background: #111116;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 22px;
+    display: flex;
+    flex-direction: column;
+}
+
+.now {
+    color: #777;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.song {
+    font-size: 24px;
+    font-weight: 900;
+    margin-top: 5px;
+}
+
+.singing {
+    color: #4dffa6;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.album {
+    height: 190px;
+    margin: 20px 0;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 65px;
+
+    background: linear-gradient(
+        135deg,
+        #ff4d9e,
+        #4d8bff,
+        #b84dff
+    );
+}
+
+.lyrics {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    gap: 13px;
+}
+
+.lyric {
+    color: #555;
+    font-size: 16px;
+}
+
+.lyric.active {
+    color: white;
+    font-size: 25px;
+    font-weight: 900;
+}
+
+.progress {
+    height: 5px;
+    background: #292930;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 18px;
+}
+
+.progress-bar {
+    width: 43%;
+    height: 100%;
+    background: linear-gradient(90deg, #4d8bff, #b84dff);
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.control {
+    width: 48px;
+    height: 48px;
+    border: 0;
+    border-radius: 50%;
+    background: #23232b;
+    color: white;
+    font-size: 18px;
+}
+
+.mic {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #ff4d9e, #b84dff);
+}
+
+.mic.active {
+    background: #ff315f;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.panel {
+    background: #111116;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 20px;
+    padding: 16px;
+}
+
+.panel-title {
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.person {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+}
+
+.avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(
+        135deg,
+        #4d8bff,
+        #b84dff
+    );
+
+    font-weight: 800;
+}
+
+.person-info {
+    flex: 1;
+}
+
+.person-name {
+    font-size: 14px;
+}
+
+.person-status {
+    color: #777;
+    font-size: 11px;
+}
+
+.online {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4dffa6;
+}
+
+.queue {
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.queue:last-child {
+    border-bottom: 0;
+}
+
+.queue-title {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.queue-user {
+    color: #777;
+    font-size: 11px;
+}
+
+.chat {
+    height: 230px;
+    display: flex;
+    flex-direction: column;
+}
+
+.messages {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.message {
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.message b {
+    color: #4d8bff;
+}
+
+.chat-input {
+    width: 100%;
+    height: 42px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.1);
+    background: #18181f;
+    color: white;
+    padding: 0 12px;
+    outline: none;
+}
+
+/* MOBILE */
+
+@media (max-width: 800px) {
+
+    .content {
+        display: block;
+        padding: 10px;
+    }
+
+    .stage {
+        min-height: calc(100dvh - 84px);
+    }
+
+    .sidebar {
+        margin-top: 12px;
+    }
+}
+
+@media (max-width: 500px) {
+
+    .logo {
+        font-size: 34px;
+    }
+
+    .home-card {
+        padding: 26px 18px;
+    }
+
+    .stage {
+        border-radius: 18px;
+        padding: 15px;
+    }
+
+    .album {
+        height: 160px;
+    }
+
+    .lyric.active {
+        font-size: 21px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HOME -->
+
+<section id="home">
+
+    <div class="home-card">
+
+        <div class="logo">
+            KARAOKE
+        </div>
+
+        <div class="subtitle">
+            Sing together with your friends 🎤
+        </div>
+
+        <div id="error" class="error"></div>
+
+        <input
+            id="username"
+            class="input"
+            type="text"
+            autocomplete="nickname"
+            placeholder="ชื่อของคุณ"
+            maxlength="20"
+        >
+
+        <button
+            id="createBtn"
+            class="btn create-btn"
+            type="button"
+        >
+            ＋ Create Room
+        </button>
+
+        <div class="divider">
+            OR
+        </div>
+
+        <input
+            id="roomCodeInput"
+            class="input"
+            type="text"
+            autocomplete="off"
+            autocapitalize="characters"
+            placeholder="Room Code"
+            maxlength="6"
+        >
+
+        <button
+            id="joinBtn"
+            class="btn join-btn"
+            type="button"
+        >
+            Join Room
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- ROOM -->
+
+<section id="room">
+
+    <header class="topbar">
+
+        <div>
+
+            <div class="room-title">
+                🎤 Friday Night Karaoke
+            </div>
+
+            <div class="room-code">
+                ROOM:
+                <span id="roomCodeDisplay">
+                    ------
+                </span>
+            </div>
+
+        </div>
+
+        <button
+            id="leaveBtn"
+            class="leave-btn"
+            type="button"
+        >
+            Leave
+        </button>
+
+    </header>
+
+
+    <main class="content">
+
+        <!-- MAIN KARAOKE -->
+
+        <section class="stage">
+
+            <div class="now">
+                NOW PLAYING
+            </div>
+
+            <div class="song">
+                คืนที่ดาวเต็มฟ้า
+            </div>
+
+            <div
+                id="singingUser"
+                class="singing"
+            >
+                🎤 You
+            </div>
+
+            <div class="album">
+                🎵
+            </div>
+
+            <div class="lyrics">
+
+                <div class="lyric">
+                    คืนนี้มีดาวเต็มฟ้า
+                </div>
+
+                <div class="lyric active">
+                    และฉันยังคงคิดถึงเธอ
+                </div>
+
+                <div class="lyric">
+                    แม้เราจะอยู่แสนไกล
+                </div>
+
+            </div>
+
+            <div class="progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <div class="controls">
+
+                <button class="control" type="button">
+                    ⏮
+                </button>
+
+                <button class="control" type="button">
+                    ▶
+                </button>
+
+                <button
+                    id="micBtn"
+                    class="control mic"
+                    type="button"
+                >
+                    🎤
+                </button>
+
+                <button class="control" type="button">
+                    ⏭
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+            <!-- PEOPLE -->
+
+            <div class="panel">
+
+                <div class="panel-title">
+                    👥 People
+                </div>
+
+                <div id="peopleList">
+
+                    <div class="person">
+
+                        <div
+                            id="userAvatar"
+                            class="avatar"
+                        >
+                            Y
+                        </div>
+
+                        <div class="person-info">
+
+                            <div
+                                id="userNameDisplay"
+                                class="person-name"
+                            >
+                                You
+                            </div>
+
+                            <div class="person-status">
+                                🎤 Singing
+                            </div>
+
+                        </div>
+
+                        <div class="online"></div>
+
+                    </div>
+
+
+                    <div class="person">
+
+                        <div class="avatar">
+                            F
+                        </div>
+
+                        <div class="person-info">
+
+                            <div class="person-name">
+                                Fighter
+                            </div>
+
+                            <div class="person-status">
+                                Listening
+                            </div>
+
+                        </div>
+
+                        <div class="online"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUEUE -->
+
+            <div class="panel">
+
+                <div class="panel-title">
+                    🎶 Song Queue
+                </div>
+
+                <div class="queue">
+
+                    <div class="queue-title">
+                        1. คืนที่ดาวเต็มฟ้า
+                    </div>
+
+                    <div class="queue-user">
+                        You
+                    </div>
+
+                </div>
+
+                <div class="queue">
+
+                    <div class="queue-title">
+                        2. ถ้าเธอรักฉันจริง
+                    </div>
+
+                    <div class="queue-user">
+                        Fighter
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CHAT -->
+
+            <div class="panel chat">
+
+                <div class="panel-title">
+                    💬 Chat
+                </div>
+
+                <div
+                    id="messages"
+                    class="messages"
+                >
+
+                    <div class="message">
+                        <b>Fighter:</b>
+                        พร้อมร้องแล้ว 😂
+                    </div>
+
+                </div>
+
+                <input
+                    id="chatInput"
+                    class="chat-input"
+                    type="text"
+                    placeholder="พิมพ์ข้อความ..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+        </aside>
+
+    </main>
+
+</section>
+
+
+<script>
+"use strict";
+
+let currentUser = "";
+let currentRoom = "";
+let micStream = null;
+
+
+/* ELEMENTS */
+
+const home = document.getElementById("home");
+const room = document.getElementById("room");
+const username = document.getElementById("username");
+const roomCodeInput = document.getElementById("roomCodeInput");
+const errorBox = document.getElementById("error");
+const roomCodeDisplay = document.getElementById("roomCodeDisplay");
+const userNameDisplay = document.getElementById("userNameDisplay");
+const userAvatar = document.getElementById("userAvatar");
+const singingUser = document.getElementById("singingUser");
+const micBtn = document.getElementById("micBtn");
+const chatInput = document.getElementById("chatInput");
+const messages = document.getElementById("messages");
+
+
+/* ERROR */
+
+function showError(message) {
+    errorBox.textContent = message;
+    errorBox.style.display = "block";
+}
+
+function hideError() {
+    errorBox.textContent = "";
+    errorBox.style.display = "none";
+}
+
+
+/* ROOM CODE */
+
+function generateRoomCode() {
+
+    const chars =
+        "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+    let code = "";
+
+    for (let i = 0; i < 6; i++) {
+
+        code += chars[
+            Math.floor(
+                Math.random() * chars.length
+            )
+        ];
+
+    }
+
+    return code;
+}
+
+
+/* CREATE ROOM */
+
+document
+.getElementById("createBtn")
+.addEventListener("click", function () {
+
+    hideError();
+
+    const name =
+        username.value.trim();
+
+    if (!name) {
+
+        showError(
+            "กรุณาใส่ชื่อของคุณก่อนสร้างห้อง"
+        );
+
+        username.focus();
+
+        return;
+    }
+
+    currentUser = name;
+
+    currentRoom = generateRoomCode();
+
+    enterRoom();
+});
+
+
+/* JOIN ROOM */
+
+document
+.getElementById("joinBtn")
+.addEventListener("click", function () {
+
+    hideError();
+
+    const name =
+        username.value.trim();
+
+    const code =
+        roomCodeInput.value
+        .trim()
+        .toUpperCase();
+
+    if (!name) {
+
+        showError(
+            "กรุณาใส่ชื่อของคุณก่อน"
+        );
+
+        username.focus();
+
+        return;
+    }
+
+    if (code.length !== 6) {
+
+        showError(
+            "Room Code ต้องมี 6 ตัวอักษร"
+        );
+
+        roomCodeInput.focus();
+
+        return;
+    }
+
+    currentUser = name;
+
+    currentRoom = code;
+
+    enterRoom();
+});
+
+
+/* ENTER ROOM */
+
+function enterRoom() {
+
+    home.style.display = "none";
+
+    room.style.display = "block";
+
+    roomCodeDisplay.textContent =
+        currentRoom;
+
+    userNameDisplay.textContent =
+        currentUser;
+
+    singingUser.textContent =
+        "🎤 " + currentUser;
+
+    userAvatar.textContent =
+        currentUser
+        .charAt(0)
+        .toUpperCase();
+
+    window.scrollTo(0, 0);
+}
+
+
+/* LEAVE */
+
+document
+.getElementById("leaveBtn")
+.addEventListener("click", function () {
+
+    stopMicrophone();
+
+    room.style.display = "none";
+
+    home.style.display = "flex";
+
+    currentUser = "";
+
+    currentRoom = "";
+
+    roomCodeInput.value = "";
+});
+
+
+/* MICROPHONE */
+
+micBtn.addEventListener(
+"click",
+async function () {
+
+    if (micStream) {
+
+        stopMicrophone();
+
+        return;
+    }
+
+    if (
+        !navigator.mediaDevices ||
+        !navigator.mediaDevices.getUserMedia
+    ) {
+
+        showError(
+            "อุปกรณ์นี้ไม่รองรับไมโครโฟนจากหน้านี้"
+        );
+
+        return;
+    }
+
+    try {
+
+        micStream =
+            await navigator.mediaDevices
+            .getUserMedia({
+                audio: true
+            });
+
+        micBtn.classList.add("active");
+
+        micBtn.textContent = "🔴";
+
+    } catch (error) {
+
+        showError(
+            "ไม่สามารถเปิดไมโครโฟนได้ กรุณาอนุญาต Microphone"
+        );
+    }
+});
+
+
+function stopMicrophone() {
+
+    if (!micStream) return;
+
+    micStream
+    .getTracks()
+    .forEach(function(track) {
+        track.stop();
+    });
+
+    micStream = null;
+
+    micBtn.classList.remove("active");
+
+    micBtn.textContent = "🎤";
+}
+
+
+/* CHAT */
+
+chatInput.addEventListener(
+"keydown",
+function(event) {
+
+    if (event.key !== "Enter") return;
+
+    const text =
+        chatInput.value.trim();
+
+    if (!text) return;
+
+    const message =
+        document.createElement("div");
+
+    message.className =
+        "message";
+
+    const name =
+        document.createElement("b");
+
+    name.textContent =
+        currentUser + ":";
+
+    message.appendChild(name);
+
+    message.appendChild(
+        document.createTextNode(
+            " " + text
+        )
+    );
+
+    messages.appendChild(message);
+
+    chatInput.value = "";
+
+    messages.scrollTop =
+        messages.scrollHeight;
+});
+
+
+/* ROOM CODE INPUT */
+
+roomCodeInput.addEventListener(
+"input",
+function() {
+
+    this.value =
+        this.value
+        .replace(/[^a-zA-Z0-9]/g, "")
+        .toUpperCase()
+        .slice(0, 6);
+
+});
+
+
+/* ENTER KEY */
+
+username.addEventListener(
+"keydown",
+function(event) {
+
+    if (event.key === "Enter") {
+
+        document
+        .getElementById("createBtn")
+        .click();
+
+    }
+});
+
+
+roomCodeInput.addEventListener(
+"keydown",
+function(event) {
+
+    if (event.key === "Enter") {
+
+        document
+        .getElementById("joinBtn")
+        .click();
+
+    }
+});
+</script>
+
+</body>
+</html>
